@@ -2,12 +2,8 @@ import "./App.css";
 import Select from "react-select";
 import { useState, useEffect } from "react";
 import countryData from "countrycitystatejson";
-
-const options = [
-  { value: "chocolate", label: "Chocolate" },
-  { value: "strawberry", label: "Strawberry" },
-  { value: "vanilla", label: "Vanilla" },
-];
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const data = countryData.getAll();
@@ -19,7 +15,7 @@ function App() {
   const customStyles = {
     control: (provided) => ({
       ...provided,
-      width: 300, // Change this value to adjust the width as needed
+      width: 300,
     }),
   };
 
@@ -41,6 +37,10 @@ function App() {
     setSelectedStates(null);
   }
 
+  function showMessage(msg) {
+    toast(`Selected State is : ${msg}`);
+  }
+
   useEffect(() => {
     getAllCountryData();
   }, []);
@@ -50,6 +50,12 @@ function App() {
       getStatesName(selectedCountry);
     }
   }, [selectedCountry]);
+
+  useEffect(() => {
+    if (selectedCountry && selectedStates) {
+      showMessage(selectedStates.label);
+    }
+  }, [selectedStates]);
 
   return (
     <div className="container">
@@ -62,21 +68,21 @@ function App() {
           styles={customStyles}
         />
       </div>
-      {selectedCountry ? (
-        <div className="states_container">
-          <p className="dropdown_label">Select a State</p>
-          <Select
-            value={selectedStates}
-            onChange={setSelectedStates}
-            options={states}
-            styles={customStyles}
-          />
-        </div>
-      ) : (
-        <p className="select_country_text">
-          *Please Select a Country to Select the State
-        </p>
-      )}
+      <div className="states_container">
+        <p className="dropdown_label">Select a State</p>
+        <Select
+          value={selectedStates}
+          onChange={setSelectedStates}
+          options={states}
+          styles={customStyles}
+        />
+        {!selectedCountry && (
+          <p className="select_country_text">
+            *Please Select a Country to Select the State
+          </p>
+        )}
+      </div>
+      <ToastContainer />
     </div>
   );
 }

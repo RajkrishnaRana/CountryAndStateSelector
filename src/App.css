@@ -20,8 +20,11 @@
   font-weight: bold;
 }
 
+.select_country_text_container {
+  width: 80px;
+  background-color: aqua;
+}
 .select_country_text {
   color: grey;
   font-size: 14px;
-  align-self: center;
 }
